@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Build files
+build/
+
+# Algorithm model files
+models/
+
+# SNPE Framework
+snpe/
+libs/

@@ -1,0 +1,26 @@
+{
+    "name":"yolov3",
+    "config":{
+      "general":{
+        "type":"rtsp",
+        "uri":"rtsp://admin:ZKCD1234@10.0.23.227:554",
+        "file-loop":false
+      },
+      "uri":{
+        "rtsp-latency":0,
+        "rtsp-reconnect-interval-secs":-1,
+        "rtp-protocols-select":7
+      },
+      "output":{
+        "crop":{
+          "x":-1,
+          "y":-1,
+          "width":-1,
+          "height":-1
+        },
+        "format":"BGR",
+        "width":1920,
+        "height":1080
+      }
+    }
+  }
