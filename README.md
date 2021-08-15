@@ -54,7 +54,7 @@
 
 ## 运行流程
 
-![SampleFrame (images/SampleFrame (1).png)](../../Downloads/SampleFrame (1).png)
+![SampleFrame](images/SampleFrame.png)
 
 - 解码通过`uridecodebin`完成；
 - 使用`tee`插件解耦视频处理和算法处理，维护两个数据缓冲队列完成两者必须的数据交互；
