@@ -1,3 +1,12 @@
+/*
+ * @Description: Main thread.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:59:43
+ */
+
 #include <unistd.h>
 #include <sys/stat.h>
 #include <gflags/gflags.h>

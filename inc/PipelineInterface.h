@@ -1,14 +1,18 @@
+/*
+ * @Description: Standard pipeline library abstrct.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:56:04
+ */
+
+
 #ifndef __TS_PIPELINE_INTERFACE_H__
 #define __TS_PIPELINE_INTERFACE_H__
 
-//
-// headers included
-//
 #include "Common.h"
 
-//
-// SplCallbacks
-//
 typedef struct {
     cbPutData   putData    { NULL }; // args[0]
     cbGetResult  getResult  { NULL }; // args[1]
@@ -16,9 +20,6 @@ typedef struct {
     void*        args[3]    { NULL, NULL, NULL };
 } PipelineCallbacks;
 
-//
-// functions
-//
 extern "C"  void* splInit (const std::string& args);
 
 extern "C"  bool splStart (void* spl);

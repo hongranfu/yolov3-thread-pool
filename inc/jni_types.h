@@ -1,3 +1,13 @@
+/*
+ * @Description: Basic data types for algorithm.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:57:32
+ */
+
+
 #ifndef NIKEDEMO_JNI_TYPES_H
 #define NIKEDEMO_JNI_TYPES_H
 

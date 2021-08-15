@@ -1,23 +1,20 @@
 /*
- * Copyright © 2021-2022 Thunder Software Technology Co., Ltd.
- * All rights reserved.
- * Author: qianyong
- * Date: 2021/07/12
+ * @Description: Adavanced data buffer structure APIs.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:56:52
  */
+
 #ifndef __TS_DATA_INTERFACE_H__
 #define __TS_DATA_INTERFACE_H__
 
-//
-// headers included
-//
 #include <functional>
 #include <memory>
 
 #include <Common.h>
 
-//
-// DataInterface<T>
-//
 template <typename T>
 class DataInterface
 {

@@ -1,3 +1,12 @@
+/*
+ * @Description: Implement of yolov3 algorithm SDK.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 14:07:09
+ */
+
 #include <DlContainer/IDlContainer.hpp>
 #include <DlSystem/String.hpp>
 #include <DlSystem/DlError.hpp>

@@ -1,4 +1,12 @@
-//ThreadPool.h
+/*
+ * @Description: Thread pool implement.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:55:53
+ */
+
 
 #pragma once 
 #include <functional> 

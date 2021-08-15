@@ -1,7 +1,15 @@
+/*
+ * @Description: Yolov3 SDK implement.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 14:04:40
+ */
+
 #ifndef NIKEDEMO_NIKESHOESRECOGNITION_H
 #define NIKEDEMO_NIKESHOESRECOGNITION_H
 
-#include "jni_types.h"
 #include <iostream>
 #include <math.h>
 #include <SNPE/SNPE.hpp>
@@ -11,7 +19,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgproc/imgproc_c.h>
 
-#include "time_utility.hpp"
+#include "jni_types.h"
 
 #define MODEL_INPUT_BATCH 1
 #define MODEL_INPUT_W 416

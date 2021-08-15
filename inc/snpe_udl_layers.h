@@ -1,7 +1,3 @@
-//
-// Created by starlitsky2010 on 18-6-27.
-//
-
 #ifndef FACENN_SNPE_UDL_LAYERS_H
 #define FACENN_SNPE_UDL_LAYERS_H
 

@@ -1,28 +1,24 @@
 /*
- * Copyright © 2021-2022 Thunder Software Technology Co., Ltd.
- * All rights reserved.
- * Author: qianyong
- * Date: 2021/06/25
+ * @Description: Implement of double buffer cache - a swap list size 2.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:56:44
  */
+
 #ifndef __TS_DATA_DOUBLE_CACHE_H__
 #define __TS_DATA_DOUBLE_CACHE_H__
 
-//
-// headers included
-//
 #include <chrono>
 #include <functional>
 #include <condition_variable>
 #include <atomic>
 #include <mutex>
 
-#include <DataInterface.h>
+#include "DataInterface.h"
+#include "Common.h"
 
-#include <Common.h>
-
-//
-// DataDoubleCache<T>
-//
 template <typename T>
 class DataDoubleCache : public DataInterface<T>
 {

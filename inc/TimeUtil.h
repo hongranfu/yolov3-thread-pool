@@ -1,13 +1,16 @@
-//
-// Created by liqing on 18-8-31.
-//
+/*
+ * @Description: Time Utils.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:55:44
+ */
 
 #ifndef _TIMEUTIL_H
 #define _TIMEUTIL_H
 
 #include <sys/time.h>
-
-#define __USE_XOPEN
 #include <time.h>
 
 inline long getCurrentTime_ms() {

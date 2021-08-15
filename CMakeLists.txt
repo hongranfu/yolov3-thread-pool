@@ -41,7 +41,6 @@ link_directories(
 add_definitions(-DUSE_MODEL_FILE)
 
 add_executable(${PROJECT_NAME}
-    ${SOURCE}/time_utility.cpp
     ${SOURCE}/VideoPipeline.cpp
     ${SOURCE}/PipelineInterface.cpp
     ${SOURCE}/YoloClassification.cpp

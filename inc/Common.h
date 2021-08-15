@@ -1,3 +1,12 @@
+/*
+ * @Description: Common header and macro define.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:56:38
+ */
+
 #ifndef __COMMON_H__
 #define __COMMON_H__
 

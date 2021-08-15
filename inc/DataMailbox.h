@@ -1,9 +1,16 @@
+/*
+ * @Description: Implement of Data Mail box - a lock list template.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:56:15
+ */
+
+
 #ifndef __TS_DATA_MAILBOX_H__
 #define __TS_DATA_MAILBOX_H__
 
-//
-// headers included
-//
 #include <chrono>
 #include <functional>
 #include <condition_variable>
@@ -12,17 +19,11 @@
 
 #include "DataInterface.h"
 
-//
-// DiscardStrategy
-//
 typedef enum {
   DISCARD_OLDEST,
   DISCARD_NEWEST
 } DiscardStrategy;
 
-//
-// DataMailbox<T>
-//
 template <typename T>
 class DataMailbox : public DataInterface<T>
 {
@@ -102,9 +103,6 @@ private:
     bool strategy_          { DISCARD_OLDEST };
     int  data_maxcnt_       { -1             };
 
-//
-// following API only for advanced user
-//
 public:
     std::mutex& GetMutex (void) {
         return mutex_;

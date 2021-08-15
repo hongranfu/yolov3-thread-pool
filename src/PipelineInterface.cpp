@@ -1,9 +1,16 @@
+/*
+ * @Description: Implement of pipeline standard APIs.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 14:01:24
+ */
+
+
 #include "VideoPipeline.h"
 #include "PipelineInterface.h"
 
-//
-// parse_args
-//
 static bool parse_args (VideoPipelineConfig& config, const std::string& path)
 {
     JsonParser* parser = NULL;
@@ -30,7 +37,6 @@ static bool parse_args (VideoPipelineConfig& config, const std::string& path)
                 goto done;
             }
 
-            // parse the video pipeline parameters from json format string
             if (json_object_has_member (object, "general")) {
                 JsonObject* g = json_object_get_object_member (object, "general");
 
@@ -200,9 +206,6 @@ done:
     return ret;
 }
 
-//
-// splInit
-//
 void* splInit (const std::string& args)
 {
     TS_INFO_MSG_V ("splInit called");
@@ -230,9 +233,6 @@ void* splInit (const std::string& args)
     return vp;
 }
 
-//
-// splStart
-//
 bool splStart (void* spl)
 {
     TS_INFO_MSG_V ("splStart called");
@@ -247,9 +247,6 @@ bool splStart (void* spl)
     return TRUE;
 }
 
-//
-// splPause
-//
 bool splPause (void* spl)
 {
     TS_INFO_MSG_V ("splPause called");
@@ -264,9 +261,6 @@ bool splPause (void* spl)
     return TRUE;
 }
 
-//
-// splResume
-//
 bool splResume (void* spl)
 {
     TS_INFO_MSG_V ("splResume called");
@@ -281,17 +275,11 @@ bool splResume (void* spl)
     return TRUE;
 }
 
-//
-// splStop
-//
 void splStop (void* spl)
 {
     TS_INFO_MSG_V ("splStop called");
 }
 
-//
-// splFina
-//
 void splFina (void* spl)
 {
     TS_INFO_MSG_V ("splFina called");
@@ -303,12 +291,9 @@ void splFina (void* spl)
     delete vp;
 }
 
-//
-// splSetCb
-//
 bool splSetCb (void* spl, const PipelineCallbacks& cb)
 {
-    //TS_INFO_MSG_V ("splSetCb called");
+    TS_INFO_MSG_V ("splSetCb called");
 
     VideoPipeline* vp = (VideoPipeline*) spl;
 

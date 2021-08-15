@@ -1,3 +1,12 @@
+/*
+ * @Description: Gstreamer pipeline class.
+ * @version: 0.1
+ * @Author: Ricardo Lu<shenglu1202@163.com>
+ * @Date: 2021-08-14 19:12:19
+ * @LastEditors: Ricardo Lu
+ * @LastEditTime: 2021-08-15 13:55:38
+ */
+
 #ifndef __VIDEO_PIPELINE_H__
 #define __VIDEO_PIPELINE_H__
 
