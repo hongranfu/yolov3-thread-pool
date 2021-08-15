@@ -14,7 +14,7 @@ pkg_check_modules(GLIB           REQUIRED glib-2.0)
 pkg_check_modules(JSON           REQUIRED json-glib-1.0)
 pkg_check_modules(GFLAGS         REQUIRED gflags)
 
-set(OpenCV_DIR "/opt/thundersoft/opencv-4.2.0/lib/cmake/opencv4")
+set(OpenCV_DIR "/opt/opencv-4.2.0/lib/cmake/opencv4")
 find_package(OpenCV REQUIRED)
 
 include_directories(
