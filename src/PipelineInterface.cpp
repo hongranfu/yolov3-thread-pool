@@ -4,7 +4,7 @@
  * @Author: Ricardo Lu<shenglu1202@163.com>
  * @Date: 2021-08-14 19:12:19
  * @LastEditors: Ricardo Lu
- * @LastEditTime: 2021-08-15 14:01:24
+ * @LastEditTime: 2021-08-17 20:42:37
  */
 
 
@@ -36,158 +36,173 @@ static bool parse_args (VideoPipelineConfig& config, const std::string& path)
                 TS_ERR_MSG_V ("Failed to get object from JsonNode");
                 goto done;
             }
+            if (json_object_has_member (object, "config")) {
+                JsonObject* cfg = json_object_get_object_member (object, "config");
+                // parse the video pipeline parameters from json format string
+                if (json_object_has_member (cfg, "general")) {
+                    JsonObject* g = json_object_get_object_member (cfg, "general");
 
-            if (json_object_has_member (object, "general")) {
-                JsonObject* g = json_object_get_object_member (object, "general");
+                    if (json_object_has_member (g, "uri")) {
+                        std::string u ((const char*)json_object_get_string_member (
+                            g, "uri"));
+                        TS_INFO_MSG_V ("\tsource-uri:%s", u.c_str());
+                        config.uri_ = u;
+                    }
 
-                if (json_object_has_member (g, "uri")) {
-                    std::string u ((const char*)json_object_get_string_member (
-                        g, "uri"));
-                    TS_INFO_MSG_V ("\tsource-uri:%s", u.c_str());
-                    config.uri_ = u;
+                    if (json_object_has_member (g, "file-loop")) {
+                        gboolean l = json_object_get_boolean_member (
+                            g, "file-loop");
+                        TS_INFO_MSG_V ("\tfile-loop:%s", l?"true":"false");
+                        config.file_loop_ = l;
+                    }
                 }
 
-                if (json_object_has_member (g, "file-loop")) {
-                    gboolean l = json_object_get_boolean_member (
-                        g, "file-loop");
-                    TS_INFO_MSG_V ("\tfile-loop:%s", l?"true":"false");
-                    config.file_loop_ = l;
-                }
-            }
+                if (json_object_has_member (cfg, "uri")) {
+                    JsonObject* u = json_object_get_object_member (cfg, "uri");
 
-            if (json_object_has_member (object, "uri")) {
-                JsonObject* u = json_object_get_object_member (object, "uri");
+                    if (json_object_has_member (u, "rtsp-latency")) {
+                        int l = json_object_get_int_member (u, "rtsp-latency");
+                        TS_INFO_MSG_V ("\trtsp-latency:%d", l);
+                        config.rtsp_latency_ = l;
+                    }
 
-                if (json_object_has_member (u, "rtsp-latency")) {
-                    int l = json_object_get_int_member (u, "rtsp-latency");
-                    TS_INFO_MSG_V ("\trtsp-latency:%d", l);
-                    config.rtsp_latency_ = l;
-                }
+                    if (json_object_has_member (u, "rtsp-reconnect-interval-secs")) {
+                        int r = json_object_get_int_member (u,
+                            "rtsp-reconnect-interval-secs");
+                        TS_INFO_MSG_V ("\trtsp-reconnect-interval-secs:%d", r);
+                        config.rtsp_reconnect_interval_secs_ = r;
+                    }
 
-                if (json_object_has_member (u, "rtsp-reconnect-interval-secs")) {
-                    int r = json_object_get_int_member (u,
-                        "rtsp-reconnect-interval-secs");
-                    TS_INFO_MSG_V ("\trtsp-reconnect-interval-secs:%d", r);
-                    config.rtsp_reconnect_interval_secs_ = r;
-                }
-
-                if (json_object_has_member (u, "rtp-protocols-select")) {
-                    int p = json_object_get_int_member (u, "rtp-protocols-select");
-                    TS_INFO_MSG_V ("\trtp-protocols-select:%d", p);
-                    config.rtsp_reconnect_interval_secs_ = (guint)p;
-                }
-            }
-
-            if (json_object_has_member (object, "display")) {
-                JsonObject* d = json_object_get_object_member (object, "display");
-
-                if (json_object_has_member (d, "sync")) {
-                    gboolean s = json_object_get_boolean_member (d, "sync");
-                    TS_INFO_MSG_V ("\tsync:%s", s?"true":"false");
-                    config.display_sync_ = s;
+                    if (json_object_has_member (u, "rtp-protocols-select")) {
+                        int p = json_object_get_int_member (u, "rtp-protocols-select");
+                        TS_INFO_MSG_V ("\trtp-protocols-select:%d", p);
+                        config.rtsp_reconnect_interval_secs_ = (guint)p;
+                    }
                 }
 
-                if (json_object_has_member (d, "x")) {
-                    int x = json_object_get_int_member (d, "x");
-                    TS_INFO_MSG_V ("\tx:%d", x);
-                    config.display_x_ = x;
-                }
+                if (json_object_has_member (cfg, "display")) {
+                    JsonObject* d = json_object_get_object_member (cfg, "display");
 
-                if (json_object_has_member (d, "y")) {
-                    int y = json_object_get_int_member (d, "y");
-                    TS_INFO_MSG_V ("\ty:%d", y);
-                    config.display_y_ = y;
-                }
+                    if (json_object_has_member (d, "sync")) {
+                        gboolean s = json_object_get_boolean_member (d, "sync");
+                        TS_INFO_MSG_V ("\tsync:%s", s?"true":"false");
+                        config.display_sync_ = s;
+                    }
 
-                if (json_object_has_member (d, "width")) {
-                    int w = json_object_get_int_member (d, "width");
-                    TS_INFO_MSG_V ("\twidth:%d", w);
-                    config.display_width_ = w;
-                }
-
-                if (json_object_has_member (d, "height")) {
-                    int h = json_object_get_int_member (d, "height");
-                    TS_INFO_MSG_V ("\theight:%d", h);
-                    config.display_height_ = h;
-                }
-            }
-
-            if (json_object_has_member (object, "rtmp")) {
-                JsonObject* r = json_object_get_object_member (object, "rtmp");
-
-                if (json_object_has_member (r, "enable")) {
-                    gboolean e = json_object_get_boolean_member (r, "enable");
-                    TS_INFO_MSG_V ("\tenable:%s", e?"true":"false");
-                    config.rtmp_enable_ = e;
-                }
-
-                if (json_object_has_member (r, "interval-intra")) {
-                    int i = json_object_get_int_member (r, "interval-intra");
-                    TS_INFO_MSG_V ("\tinterval-intra:%d", i);
-                    config.enc_fps_ = i;
-                }
-
-                if (json_object_has_member (r, "target-bitrate")) {
-                    int b = json_object_get_int_member (r, "target-bitrate");
-                    TS_INFO_MSG_V ("\ttarget-bitrate:%d", b);
-                    config.enc_bitrate_ = b;
-                }
-
-                if (json_object_has_member (r, "url")) {
-                    std::string u ((const char*)json_object_get_string_member (
-                        r, "url"));
-                    TS_INFO_MSG_V ("\turl:%s", u.c_str());
-                    config.rtmp_url_ = u;
-                }
-            }
-
-            if (json_object_has_member (object, "output")) {
-                JsonObject* o = json_object_get_object_member (object, "output");
-                if (json_object_has_member (o, "crop")) {
-                    JsonObject* c = json_object_get_object_member (o, "crop");
-
-                    if (json_object_has_member (c, "x")) {
-                        int x = json_object_get_int_member (c, "x");
+                    if (json_object_has_member (d, "x")) {
+                        int x = json_object_get_int_member (d, "x");
                         TS_INFO_MSG_V ("\tx:%d", x);
-                        config.crop_x_ = x;
+                        config.display_x_ = x;
                     }
 
-                    if (json_object_has_member (c, "y")) {
-                        int y = json_object_get_int_member (c, "y");
+                    if (json_object_has_member (d, "y")) {
+                        int y = json_object_get_int_member (d, "y");
                         TS_INFO_MSG_V ("\ty:%d", y);
-                        config.crop_y_ = y;
+                        config.display_y_ = y;
                     }
 
-                    if (json_object_has_member (c, "width")) {
-                        int w = json_object_get_int_member (c, "width");
+                    if (json_object_has_member (d, "width")) {
+                        int w = json_object_get_int_member (d, "width");
                         TS_INFO_MSG_V ("\twidth:%d", w);
-                        config.crop_width_ = w;
+                        config.display_width_ = w;
                     }
 
-                    if (json_object_has_member (c, "height")) {
-                        int h = json_object_get_int_member (c, "height");
+                    if (json_object_has_member (d, "height")) {
+                        int h = json_object_get_int_member (d, "height");
                         TS_INFO_MSG_V ("\theight:%d", h);
-                        config.crop_height_ = h;
+                        config.display_height_ = h;
                     }
                 }
 
-                if (json_object_has_member (o, "format")) {
-                    std::string f ((const char*)json_object_get_string_member (
-                        o, "format"));
-                    TS_INFO_MSG_V ("\tformat:%s", f.c_str());
-                    config.output_format_ = f;
+                if (json_object_has_member (cfg, "rtmp")) {
+                    JsonObject* r = json_object_get_object_member (cfg, "rtmp");
+
+                    if (json_object_has_member (r, "enable")) {
+                        gboolean e = json_object_get_boolean_member (r, "enable");
+                        TS_INFO_MSG_V ("\tenable:%s", e?"true":"false");
+                        config.rtmp_enable_ = e;
+                    }
+
+                    if (json_object_has_member (r, "interval-intra")) {
+                        int i = json_object_get_int_member (r, "interval-intra");
+                        TS_INFO_MSG_V ("\tinterval-intra:%d", i);
+                        config.enc_fps_ = i;
+                    }
+
+                    if (json_object_has_member (r, "target-bitrate")) {
+                        int b = json_object_get_int_member (r, "target-bitrate");
+                        TS_INFO_MSG_V ("\ttarget-bitrate:%d", b);
+                        config.enc_bitrate_ = b;
+                    }
+
+                    if (json_object_has_member (r, "url")) {
+                        std::string u ((const char*)json_object_get_string_member (
+                            r, "url"));
+                        TS_INFO_MSG_V ("\turl:%s", u.c_str());
+                        config.rtmp_url_ = u;
+                    }
                 }
 
-                if (json_object_has_member (o, "width")) {
-                    int w = json_object_get_int_member (o, "width");
-                    TS_INFO_MSG_V ("\twidth:%d", w);
-                    config.output_width_ = w;
-                }
+                if (json_object_has_member (cfg, "output")) {
+                    JsonObject* o = json_object_get_object_member (cfg, "output");
+                    if (json_object_has_member (o, "crop")) {
+                        JsonObject* c = json_object_get_object_member (o, "crop");
 
-                if (json_object_has_member (o, "height")) {
-                    int h = json_object_get_int_member (o, "height");
-                    TS_INFO_MSG_V ("\theight:%d", h);
-                    config.output_height_ = h;
+                        if (json_object_has_member (c, "x")) {
+                            int x = json_object_get_int_member (c, "x");
+                            TS_INFO_MSG_V ("\tx:%d", x);
+                            config.crop_x_ = x;
+                        }
+
+                        if (json_object_has_member (c, "y")) {
+                            int y = json_object_get_int_member (c, "y");
+                            TS_INFO_MSG_V ("\ty:%d", y);
+                            config.crop_y_ = y;
+                        }
+
+                        if (json_object_has_member (c, "width")) {
+                            int w = json_object_get_int_member (c, "width");
+                            TS_INFO_MSG_V ("\twidth:%d", w);
+                            config.crop_width_ = w;
+                        }
+
+                        if (json_object_has_member (c, "height")) {
+                            int h = json_object_get_int_member (c, "height");
+                            TS_INFO_MSG_V ("\theight:%d", h);
+                            config.crop_height_ = h;
+                        }
+                    }
+
+                    if (json_object_has_member (o, "format")) {
+                        std::string f ((const char*)json_object_get_string_member (
+                            o, "format"));
+                        TS_INFO_MSG_V ("\tformat:%s", f.c_str());
+                        config.output_format_ = f;
+                    }
+
+                    if (json_object_has_member (o, "width")) {
+                        int w = json_object_get_int_member (o, "width");
+                        TS_INFO_MSG_V ("\twidth:%d", w);
+                        config.output_width_ = w;
+                    }
+
+                    if (json_object_has_member (o, "height")) {
+                        int h = json_object_get_int_member (o, "height");
+                        TS_INFO_MSG_V ("\theight:%d", h);
+                        config.output_height_ = h;
+                    }
+
+                    if (json_object_has_member (o, "fps-n")) {
+                        int n = json_object_get_int_member (o, "fps-n");
+                        TS_INFO_MSG_V ("\tfps-n:%d", n);
+                        config.output_fps_n_ = n;
+                    }
+
+                    if (json_object_has_member (o, "fps-d")) {
+                        int d = json_object_get_int_member (o, "fps-d");
+                        TS_INFO_MSG_V ("\tfps-d:%d", d);
+                        config.output_fps_d_ = d;
+                    }
                 }
             }
         }

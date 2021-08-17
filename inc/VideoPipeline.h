@@ -4,7 +4,7 @@
  * @Author: Ricardo Lu<shenglu1202@163.com>
  * @Date: 2021-08-14 19:12:19
  * @LastEditors: Ricardo Lu
- * @LastEditTime: 2021-08-15 13:55:38
+ * @LastEditTime: 2021-08-17 20:47:21
  */
 
 #ifndef __VIDEO_PIPELINE_H__
@@ -74,7 +74,7 @@
 typedef struct _VideoPipelineConfig
 {
 	/*-------------------------------rtspsrc-------------------------------*/
-	std::string  uri_                     { "rtsp://admin:ZKCD1234@10.0.23.227:554" };
+	std::string  uri_                          { "rtsp://admin:ZKCD1234@10.0.23.227:554" };
 	unsigned int rtsp_latency_                 { 0 };
     bool         file_loop_                    { false };
     int          rtsp_reconnect_interval_secs_ { -1 };
@@ -86,13 +86,15 @@ typedef struct _VideoPipelineConfig
 	unsigned int display_height_               { 1080 };
 	bool         display_sync_                 { false };
     /*----------------------------qtivtransform----------------------------*/
-    int crop_x_                                { -1 };
-	int crop_y_                                { -1 };
-	int crop_width_                            { -1 };
-	int crop_height_                           { -1 };
+    int          crop_x_                       { -1 };
+	int          crop_y_                       { -1 };
+	int          crop_width_                   { -1 };
+	int          crop_height_                  { -1 };
 	std::string  output_format_                { "BGR" };
     unsigned int output_width_                 { 1920 };
     unsigned int output_height_                { 1080 };
+    int          output_fps_n_                 { 25 };
+    int          output_fps_d_                 { 50 };
     /*-------------------------------qtivdec-------------------------------*/
 	bool         qtivdec_turbo_                { true };
 	bool         qtivdec_skip_frames_          { true };
@@ -136,6 +138,8 @@ public:
     uint64              accumulated_base_;
     uint64              prev_accumulated_base_;
     uint64              appsinked_frame_count_;
+    uint64              first_frame_timestamp_;
+    uint64              last_frame_timestamp_;
     volatile int        sync_count_;
 
     cbPutData           put_frame_func_;

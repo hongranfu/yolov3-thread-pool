@@ -4,7 +4,7 @@
  * @Author: Ricardo Lu<shenglu1202@163.com>
  * @Date: 2021-08-14 19:12:19
  * @LastEditors: Ricardo Lu
- * @LastEditTime: 2021-08-15 13:59:43
+ * @LastEditTime: 2021-08-17 20:43:48
  */
 
 #include <unistd.h>
@@ -262,8 +262,8 @@ bool putResult(
 {
     // TS_INFO_MSG_V ("putResult called");
 
-    DataMailbox<std::vector<CLASSIFY_DATA> >* dm =
-        (DataMailbox<std::vector<CLASSIFY_DATA> >*) user_data;
+    DataDoubleCache<std::vector<CLASSIFY_DATA> >* dm =
+        (DataDoubleCache<std::vector<CLASSIFY_DATA> >*) user_data;
 
      if (result) {
         if (!dm->Post(result)) {
@@ -279,12 +279,12 @@ std::shared_ptr<std::vector<CLASSIFY_DATA> > getResult(void* user_data)
 {
     // TS_INFO_MSG_V ("getResult called");
 
-    DataMailbox<std::vector<CLASSIFY_DATA> >* dm =
-        (DataMailbox<std::vector<CLASSIFY_DATA> >*) user_data;
+    DataDoubleCache<std::vector<CLASSIFY_DATA> >* dm =
+        (DataDoubleCache<std::vector<CLASSIFY_DATA> >*) user_data;
     
     std::shared_ptr<std::vector<CLASSIFY_DATA> > result =  NULL;
 
-    if (!dm->Pend(result, 0)) {
+    if (!dm->Pend(result, 200)) {
         TS_WARN_MSG_V ("Failed to get a CLASSIFY_DATA to result manager");
         return NULL;
     }
@@ -341,8 +341,8 @@ int main(int argc, char* argv[])
 
     GMainLoop* ml = NULL;
     
-    DataMailbox<std::vector<CLASSIFY_DATA> >* dm =
-        new DataMailbox<std::vector<CLASSIFY_DATA> > (DISCARD_OLDEST, 25);
+    DataDoubleCache<std::vector<CLASSIFY_DATA> >* dm =
+        new DataDoubleCache<std::vector<CLASSIFY_DATA> > (NULL);
 
     ThreadPool* tp = new ThreadPool(FLAGS_count);
     tp->init(0.7, putResult, dm);

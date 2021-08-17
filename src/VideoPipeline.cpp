@@ -4,7 +4,7 @@
  * @Author: Ricardo Lu<shenglu1202@163.com>
  * @Date: 2021-08-14 19:12:19
  * @LastEditors: Ricardo Lu
- * @LastEditTime: 2021-08-15 14:06:41
+ * @LastEditTime: 2021-08-17 20:45:03
  */
 
 #include <VideoPipeline.h>
@@ -17,7 +17,7 @@ cb_osd_buffer_probe (
 {
     // TS_INFO_MSG_V ("cb_osd_buffer_probe called");
 
-	VideoPipeline* vp = (VideoPipeline*) user_data;
+    VideoPipeline* vp = (VideoPipeline*) user_data;
     GstBuffer* buffer = (GstBuffer*) info->data;
 
     // sync
@@ -271,6 +271,22 @@ cb_appsink_new_sample (
     g_signal_emit_by_name (sink, "pull-sample", &sample);
 
     if (sample) {
+        // control the frame rate of video submited to analyzer
+        if (0 == vp->first_frame_timestamp_) {
+            vp->first_frame_timestamp_ = g_get_real_time ();
+        } else {
+            gint64 period_us_count = g_get_real_time () - vp->first_frame_timestamp_;
+            double cur = (double)(vp->appsinked_frame_count_*1000*1000) / (double)(period_us_count);
+            double dst = (double)(vp->config_.output_fps_n_) / (double)(vp->config_.output_fps_d_);
+            // TS_INFO_MSG_V ("%2.2f, %2.2f, %d/%d", cur, dst, vp->config_.output_fps_n_,
+            //    vp->config_.output_fps_d_);
+
+            if (cur > dst) {
+                gst_sample_unref (sample);
+                return GST_FLOW_OK;
+            }
+        }
+
         if (vp->put_frame_func_) {
             vp->put_frame_func_(sample, vp->put_frame_args_);
             vp->appsinked_frame_count_++;
@@ -298,6 +314,8 @@ VideoPipeline::VideoPipeline (
     accumulated_base_ = 0;
     prev_accumulated_base_ = 0;
     appsinked_frame_count_ = 0;
+    first_frame_timestamp_ = 0;
+    last_frame_timestamp_ = 0;
     sync_count_ = 0;
     put_frame_func_ = NULL;
     put_frame_args_ = NULL;
