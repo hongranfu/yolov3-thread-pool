@@ -74,10 +74,6 @@ private:
     int grid_xy1[MODEL_OUTPUT_W/2][MODEL_OUTPUT_H/2][2];
     int grid_xy2[MODEL_OUTPUT_W][MODEL_OUTPUT_H][2];
     int grid_xy3[MODEL_OUTPUT_W*2][MODEL_OUTPUT_H*2][2];
-
-    // debug
-    ts::TimeAnalyzer<uint64_t> m_time_analyzer;
-    int d_device_id = 0;
 };
 
 #endif //NIKEDEMO_NIKESHOESRECOGNITION_H

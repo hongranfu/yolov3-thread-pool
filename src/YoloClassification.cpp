@@ -142,7 +142,6 @@ state_t YoloClassification::init(int device) {
             break;
         case AIP: runtime = zdl::DlSystem::Runtime_t::AIP_FIXED8_TF;
             std::cout<<"AIP"<<std::endl;
-            d_device_id = 4;
             break;
         default:  runtime = zdl::DlSystem::Runtime_t::GPU;break;
     }
@@ -313,8 +312,7 @@ std::vector<CLASSIFY_DATA> YoloClassification::doDetect(std::shared_ptr<cv::Mat>
         std::cout<<"error code:"<<err<<std::endl;
         return result;
     }
-    uint64_t avg_time = m_time_analyzer.update(diff);
-    // std::cout<<"LQ-TEST inference time: avg:"<<diff<<avg_time<<std::endl;
+
     // post process
     long post_start = getCurrentTime_ms();
     int data_size1 = outShape1[0] * outShape1[1] * outShape1[2] * outShape1[3];
