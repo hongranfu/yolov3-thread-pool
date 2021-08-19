@@ -68,6 +68,46 @@
 
 - 使用线程池，相当于异步处理图像，由于每个线程中算法实例耗费的识别时间不同，因此存储识别结果的`DataMailBox`中存储的结果向量并不严格符合图像显示顺序，但是差距大致在20ms以内，用户感知并不明显，算是一种妥协。
 
+## 算法处理帧率控制
+
+```json
+{
+	"fps-n":25,
+    "fps-d":5
+}
+```
+
+Gstreamer Pipeline新增两个参数`output_fps_n_`和`output_fps_d_`，用于控制appsink回调调用`put_frame_func_()`送算法帧率（两个参数的商为算法处理的帧率）。
+
+```c++
+if (sample) {
+    // control the frame rate of video submited to analyzer
+    if (0 == vp->first_frame_timestamp_) {
+        vp->first_frame_timestamp_ = g_get_real_time ();
+    } else {
+        gint64 period_us_count = g_get_real_time () - vp->first_frame_timestamp_;
+        double cur = (double)(vp->appsinked_frame_count_*1000*1000) / (double)(period_us_count);
+        double dst = (double)(vp->config_.output_fps_n_) / (double)(vp->config_.output_fps_d_);
+        // TS_INFO_MSG_V ("%2.2f, %2.2f, %d/%d", cur, dst, vp->config_.output_fps_n_,
+        //    vp->config_.output_fps_d_);
+
+        if (cur > dst) {
+            gst_sample_unref (sample);
+            return GST_FLOW_OK;
+        }
+    }
+    
+    if (vp->put_frame_func_) {
+        vp->put_frame_func_(sample, vp->put_frame_args_);
+        vp->appsinked_frame_count_++;
+    } else {
+        gst_sample_unref (sample);
+    }
+}
+```
+
+维持一个算法已处理帧计数`appsinked_frame_count_`(s)和当前帧耗时`period_us_count`(us)。假设当前要控制算法处理帧率为5FPS，即`dst=5`，每sink一帧相当于增加1s，在5帧内，只要视频源的速度大于5FPS，`cur`都会大于5，这时直接释放`GstSample`并返回；直到第6帧，`cur`将小于5，送算法并且计数器加1，以此实现均匀跳帧。
+
 ## 编译&运行
 
 ```shell
