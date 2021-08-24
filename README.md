@@ -149,7 +149,7 @@ cd build && make
 
 # --cfg：pipeline 所用配置文件，用于完成VideoPipelineConfigure结构体的初始化
 # --count:yolov3算法实例个数
-./AiObject-Yolov3 --cfg ../configs/yolov3.json --count 4
+./AiObject-Yolov3 --cfg ../configs/yolov3.json --count 4 --labelpath ../models/labels.txt
 ```
 
 ## FAQ
