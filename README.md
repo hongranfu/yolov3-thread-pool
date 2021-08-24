@@ -108,6 +108,39 @@ if (sample) {
 
 维持一个算法已处理帧计数`appsinked_frame_count_`(s)和当前帧耗时`period_us_count`(us)。假设当前要控制算法处理帧率为5FPS，即`dst=5`，每sink一帧相当于增加1s，在5帧内，只要视频源的速度大于5FPS，`cur`都会大于5，这时直接释放`GstSample`并返回；直到第6帧，`cur`将小于5，送算法并且计数器加1，以此实现均匀跳帧。
 
+## qtioverlay
+
+`qtioverlay`是高通平台上用于给`NV12`格式图片帧绘画的一个Gstreamer插件，它读取GstBuffer中的metadata然后使用GPU完成Rectangle和name(string)的绘制。
+
+```c++
+#include <ml-meta/ml_meta.h> // -l libqtimlmeta.so
+
+// in osdResult(): replace drawYUVRect() to followning line
+{
+    GstMLDetectionMeta *meta = gst_buffer_add_detection_meta(buffer);
+    if (!meta) {
+        TS_ERR_MSG_V ("Failed to create metadata");
+        return ;
+    }
+
+    GstMLClassificationResult *box_info = (GstMLClassificationResult*)malloc(
+        sizeof(GstMLClassificationResult));
+
+    uint32_t label_size = g_labels[results->at(i).label].size() + 1;
+    box_info->name = (char *)malloc(label_size);
+    snprintf(box_info->name, label_size, "%s", g_labels[results->at(i).label].c_str());
+
+    box_info->confidence = results->at(i).confidence;
+    meta->box_info = g_slist_append (meta->box_info, box_info);
+
+    meta->bounding_box.x = results->at(i).rect[0];
+    meta->bounding_box.y = results->at(i).rect[1];
+    meta->bounding_box.width = results->at(i).rect[2];
+    meta->bounding_box.height = results->at(i).rect[3];
+}
+
+```
+
 ## 编译&运行
 
 ```shell
